@@ -32,7 +32,7 @@ Because there is no backend server required, getting started is as simple as ope
    ```
 3. Open `index.html` in your favorite modern web browser.
 
-Alternatively, you can visit the hosted version (if available) to use the app directly.
+Alternatively, you can try out the live demo here: **[https://image-resizer-21829.web.app/](https://image-resizer-21829.web.app/)**
 
 ## How to Use
 
