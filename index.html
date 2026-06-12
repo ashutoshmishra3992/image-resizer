@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Resizer & Compressor</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <header>
+                <h1>Image Optimizer</h1>
+                <p>Resize and compress your images offline</p>
+            </header>
+
+            <div class="drop-zone" id="dropZone">
+                <input type="file" id="fileInput" accept="image/png, image/jpeg" hidden>
+                <div class="drop-zone-content">
+                    <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    <p id="dropZoneText">Drag & drop your image here or <span class="browse-link">browse</span></p>
+                </div>
+            </div>
+
+            <div class="controls-panel" id="controlsPanel" style="display: none;">
+                <div class="control-group">
+                    <div class="input-row">
+                        <div class="input-field">
+                            <label for="widthInput">Width (px)</label>
+                            <input type="number" id="widthInput" min="1">
+                        </div>
+                        <div class="lock-wrapper" title="Lock aspect ratio">
+                            <input type="checkbox" id="aspectRatioLock" checked>
+                            <label for="aspectRatioLock" class="lock-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" />
+                                </svg>
+                            </label>
+                        </div>
+                        <div class="input-field">
+                            <label for="heightInput">Height (px)</label>
+                            <input type="number" id="heightInput" min="1">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="input-row">
+                        <div class="input-field">
+                            <label for="formatSelect">Output Format</label>
+                            <select id="formatSelect">
+                                <option value="image/jpeg">JPG / JPEG</option>
+                                <option value="image/png">PNG</option>
+                            </select>
+                        </div>
+                        <div class="input-field">
+                            <label for="maxSizeInput">Max Target Size (KB)</label>
+                            <input type="number" id="maxSizeInput" value="50" min="1">
+                        </div>
+                    </div>
+                </div>
+
+                <button id="processBtn" class="btn primary-btn">Resize & Compress</button>
+            </div>
+
+            <div id="statusContainer" class="status-container" style="display: none;">
+                <p id="statusText" class="status-text">Processing...</p>
+                <div id="resultContainer" class="result-container" style="display: none;">
+                    <p class="success-text">Success! Final size: <span id="finalSize">0 KB</span></p>
+                    <a id="downloadBtn" class="btn success-btn" download="optimized-image.jpg">Download Image</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
