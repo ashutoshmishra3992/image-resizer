@@ -18,9 +18,10 @@
             <div class="drop-zone" id="dropZone">
                 <input type="file" id="fileInput" accept="image/png, image/jpeg" hidden>
                 <div class="drop-zone-content">
-                    <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg id="uploadIcon" class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                     </svg>
+                    <img id="thumbnailPreview" alt="Original Image Thumbnail" style="display: none;">
                     <p id="dropZoneText">Drag & drop your image here or <span class="browse-link">browse</span></p>
                 </div>
             </div>
@@ -49,6 +50,23 @@
 
                 <div class="control-group">
                     <div class="input-row">
+                        <button id="rotateLeftBtn" class="btn secondary-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 1.25rem; height: 1.25rem; margin-right: 0.5rem; vertical-align: bottom;">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                            </svg>
+                            Rotate Left
+                        </button>
+                        <button id="rotateRightBtn" class="btn secondary-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 1.25rem; height: 1.25rem; margin-right: 0.5rem; vertical-align: bottom;">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3" />
+                            </svg>
+                            Rotate Right
+                        </button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="input-row">
                         <div class="input-field">
                             <label for="formatSelect">Output Format</label>
                             <select id="formatSelect">
@@ -70,6 +88,9 @@
                 <p id="statusText" class="status-text">Processing...</p>
                 <div id="resultContainer" class="result-container" style="display: none;">
                     <p class="success-text">Success! Final size: <span id="finalSize">0 KB</span></p>
+                    <div class="preview-wrapper">
+                        <img id="previewImage" alt="Processed Image Preview" />
+                    </div>
                     <a id="downloadBtn" class="btn success-btn" download="optimized-image.jpg">Download Image</a>
                 </div>
             </div>

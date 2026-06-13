@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropZone = document.getElementById('dropZone');
     const fileInput = document.getElementById('fileInput');
     const dropZoneText = document.getElementById('dropZoneText');
+    const uploadIcon = document.getElementById('uploadIcon');
+    const thumbnailPreview = document.getElementById('thumbnailPreview');
     const controlsPanel = document.getElementById('controlsPanel');
     
     const widthInput = document.getElementById('widthInput');
@@ -17,11 +19,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusText = document.getElementById('statusText');
     const resultContainer = document.getElementById('resultContainer');
     const finalSizeText = document.getElementById('finalSize');
+    const previewImage = document.getElementById('previewImage');
     const downloadBtn = document.getElementById('downloadBtn');
 
     let originalImage = null;
     let currentFile = null;
     let originalAspectRatio = 1;
+    let currentRotation = 0;
+
+    const rotateLeftBtn = document.getElementById('rotateLeftBtn');
+    const rotateRightBtn = document.getElementById('rotateRightBtn');
 
     // Drag & Drop Handlers
     dropZone.addEventListener('click', () => fileInput.click());
@@ -68,9 +75,15 @@ document.addEventListener('DOMContentLoaded', () => {
             img.onload = () => {
                 originalImage = img;
                 originalAspectRatio = img.width / img.height;
+                currentRotation = 0;
                 
                 widthInput.value = img.width;
                 heightInput.value = img.height;
+                
+                thumbnailPreview.src = e.target.result;
+                thumbnailPreview.style.display = 'block';
+                thumbnailPreview.style.transform = 'rotate(0deg)';
+                uploadIcon.style.display = 'none';
                 
                 controlsPanel.style.display = 'flex';
                 statusContainer.style.display = 'none';
@@ -93,6 +106,25 @@ document.addEventListener('DOMContentLoaded', () => {
             widthInput.value = Math.round(heightInput.value * originalAspectRatio);
         }
     });
+
+    // Rotation Handlers
+    function rotate(degrees) {
+        if (!originalImage) return;
+        currentRotation = (currentRotation + degrees) % 360;
+        if (currentRotation < 0) currentRotation += 360;
+
+        const currentWidth = widthInput.value;
+        const currentHeight = heightInput.value;
+        widthInput.value = currentHeight;
+        heightInput.value = currentWidth;
+
+        originalAspectRatio = 1 / originalAspectRatio;
+        
+        thumbnailPreview.style.transform = `rotate(${currentRotation}deg)`;
+    }
+
+    rotateLeftBtn.addEventListener('click', () => rotate(-90));
+    rotateRightBtn.addEventListener('click', () => rotate(90));
 
     // Processing Logic
     processBtn.addEventListener('click', async () => {
@@ -123,6 +155,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const originalName = currentFile.name.substring(0, currentFile.name.lastIndexOf('.')) || 'image';
             downloadBtn.download = `${originalName}-optimized.${ext}`;
 
+            previewImage.src = url;
+
             statusText.style.display = 'none';
             resultContainer.style.display = 'flex';
         } catch (error) {
@@ -141,8 +175,17 @@ document.addEventListener('DOMContentLoaded', () => {
             canvas.height = height;
             const ctx = canvas.getContext('2d');
 
-            // Draw image on canvas
-            ctx.drawImage(img, 0, 0, width, height);
+            ctx.save();
+            ctx.translate(width / 2, height / 2);
+            ctx.rotate(currentRotation * Math.PI / 180);
+
+            if (currentRotation === 90 || currentRotation === 270) {
+                ctx.drawImage(img, -height / 2, -width / 2, height, width);
+            } else {
+                ctx.drawImage(img, -width / 2, -height / 2, width, height);
+            }
+            
+            ctx.restore();
 
             if (format === 'image/png') {
                 // PNG doesn't support quality parameter natively in standard HTML5 Canvas toBlob in a way that compresses.
